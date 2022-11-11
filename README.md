@@ -42,7 +42,7 @@ PUT: /user --> changes account's username
 HEADER: { "authorization": token }
 BODY: { "password": "joga10", "username": "Flaviao" }
 
-GET: /user --> list account's total stickers
+GET: /user --> list account's total stickers (to test this in different scenarios, insert/remove/update entries from "userStickers" table via terminal or DB app like beekeeper/pgadmin/dbeaver)
 HEADER: { "authorization": token }
 
 DELETE: /user --> deletes account
