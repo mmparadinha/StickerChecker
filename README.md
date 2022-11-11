@@ -13,8 +13,10 @@ Inspired from the 2022 World Cup Sticker Album release and from using some early
 
 To challenge ourselves, we decided to create our own Sticker Manager :)
 
-Planned features:
+Features:
   - Create an account
+
+Planned features:
   - Mark the stickers you own (including repeated ones)
   - Register special stickers you draw (Legendaries: rookie, bronze, silver, gold)
   - Check your sticker album progress
@@ -29,6 +31,23 @@ Planned features:
 ## How to run
 
 Build the database locally and run the back end to start testing!
+
+POST: /signup --> creates account
+BODY: { "username": "Flavinho", "email": "flavio@copa.com", "password": "joga10" }
+
+POST: /signin --> login
+BODY: { "email": "flavio@copa.com", "password": "joga10" }
+
+PUT: /user --> changes account's username
+HEADER: { "authorization": token }
+BODY: { "password": "joga10", "username": "Flaviao" }
+
+GET: /user --> list account's total stickers
+HEADER: { "authorization": token }
+
+DELETE: /user --> deletes account
+HEADER: { "authorization": token }
+BODY: { "password": "joga10" }
 
 
 ## Versioning
