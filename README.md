@@ -2,16 +2,16 @@
 
 # StickerChecker &middot; [![Build Status](https://img.shields.io/travis/npm/npm/latest.svg?style=flat-square)](https://travis-ci.org/npm/npm) [![npm](https://img.shields.io/npm/v/npm.svg?style=flat-square)](https://www.npmjs.com/package/npm) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/your/your-project/blob/master/LICENSE)
 
-TrackIt is a straight forward, easy to use habit tracker!
+StickerChecker is, well... a sticker checker!
 
 
 ## About it
 
 Starting a future project as Typescrypt POC.
 
-You often forget your desired goal or fail to realize your accomplishment so far?
+Inspired from the 2022 World Cup Sticker Album release and from using some early incomplete apps available, we felt we could do something even better with what we have learnt the last few months.
 
-Stabilishing a new habit is already demanding, so a simpler tracker won't overload the activity while improving your perception of progress!
+To challenge ourselves, we decided to create our own Sticker Manager :)
 
 Planned features:
   - Create an account
