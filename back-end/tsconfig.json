@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "outDir": "dist",
+        "esModuleInterop": true,
+        "module": "CommonJS",
+        "moduleResolution": "Node",
+        "baseUrl": ".",
+        "paths": {
+            "string-strip-html": [
+                "node_modules/string-strip-html/dist/string-strip-html.esm",
+                "node_modules/string-strip-html/dist/string-strip-html.umd",
+                "node_modules/string-strip-html/types/index"
+            ]
+        }
+    },
+    "ts-node": {
+        "esm": true
+    }
+}
