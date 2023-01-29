@@ -40,9 +40,19 @@ function deleteUrl(id) {
     return promise;
 }
 
-function getAllStickers() {
-  const promise = axios.get(`${URL_BASE}/`);
+function getOwnedStickers() {
+  const promise = axios.get(`${URL_BASE}/owned`);
   return promise;
 }
 
-export { postSignUp, postLogin, getAllStickers };
+function getDoubledStickers() {
+  const promise = axios.get(`${URL_BASE}/doubled`);
+  return promise;
+}
+
+function getMissingStickers() {
+  const promise = axios.get(`${URL_BASE}/missing`);
+  return promise;
+}
+
+export { postSignUp, postLogin, getOwnedStickers, getDoubledStickers, getMissingStickers };

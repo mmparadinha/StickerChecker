@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default function Footer() {
     return (
         <Main>
-            <Menu to="/left">
+            <Menu to="/missing">
                 <h2>Faltantes</h2>
             </Menu>
             <Menu to="/">

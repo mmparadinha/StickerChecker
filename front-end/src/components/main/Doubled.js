@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { getAllStickers } from "../../services/StickerChecker.js";
+import { getDoubledStickers } from "../../services/StickerChecker.js";
 import Header from "../common/Header.js";
 import Footer from "../common/Footer.js";
 import Sticker from "./Sticker.js";
@@ -8,13 +8,13 @@ import Sticker from "./Sticker.js";
 export default function Doubled() {
     const [stickers, setStickers] = useState([]);
 
-    async function teste() {
-      const response = await getAllStickers();
-      setStickers(response.data.rows);
+    async function listDoubledStickers() {
+      const response = await getDoubledStickers();
+      setStickers(response.data);
     }
   
     useEffect(() => {
-      teste();
+        listDoubledStickers();
     }, []);
 
     return (
@@ -23,7 +23,7 @@ export default function Doubled() {
             <Main>
                 <h1>Repetidas</h1>
                 <Container>
-                    {stickers.map(data => <Sticker key={data.id} data={data}/>)}
+                    {stickers.map(data => <Sticker key={data.id} data={data.stickers}/>)}
                 </Container>
             </Main>
             <Footer/>

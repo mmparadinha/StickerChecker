@@ -11,7 +11,7 @@ export default function Sticker({data}) {
     
     return (
         <Main disabled={disabled} onClick={markOwned}>
-            <p>{data.countryId} {data.stickerNumber}</p>
+            <p>{data.countries.name} {data.stickerNumber}</p>
         </Main>
     );
 }
