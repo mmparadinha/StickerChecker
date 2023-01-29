@@ -1,9 +1,11 @@
 import { Router } from "express";
-import { getStickers, createSpecialSticker, updateStickerCount, deleteSticker } from "../controllers/stickersController";
+import { getOwnedStickers, getDoubledStickers, getMissingStickers, createSpecialSticker, updateStickerCount, deleteSticker } from "../controllers/stickersController";
 
 const stickersRouter = Router();
 
-stickersRouter.get('/', getStickers);
+stickersRouter.get('/owned', getOwnedStickers);
+stickersRouter.get('/doubled', getDoubledStickers);
+stickersRouter.get('/missing', getMissingStickers);
 stickersRouter.post('/', createSpecialSticker);
 stickersRouter.put('/', updateStickerCount);
 stickersRouter.delete('/', deleteSticker);

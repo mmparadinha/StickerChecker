@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model countries {
+  id       Int        @id(map: "country_pkey") @default(autoincrement())
+  name     String     @db.VarChar
+  stickers stickers[]
+}
+
+model rarities {
+  id       Int        @id(map: "rarity_pkey") @default(autoincrement())
+  level    String     @db.VarChar(255)
+  stickers stickers[]
+}
+
+model sessions {
+  id     Int    @id @default(autoincrement())
+  userId Int
+  token  String
+  users  users  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "sessions_userid_fkey")
+}
+
+model stickers {
+  id            Int            @id @default(autoincrement())
+  countryId     Int
+  stickerNumber Int
+  rarityId      Int
+  countries     countries      @relation(fields: [countryId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  rarities      rarities       @relation(fields: [rarityId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  userStickers  userStickers[]
+}
+
+model userStickers {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  stickerId Int
+  amount    Int
+  stickers  stickers @relation(fields: [stickerId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users     users    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model users {
+  id           Int            @id @default(autoincrement())
+  username     String         @db.VarChar(255)
+  email        String         @unique @db.VarChar(255)
+  password     String         @db.VarChar(255)
+  sessions     sessions[]
+  userStickers userStickers[]
+}
