@@ -9,8 +9,13 @@ export default function Missing() {
     const [stickers, setStickers] = useState([]);
 
     async function listMissingStickers() {
-      const response = await getMissingStickers();
-      setStickers(response.data);
+        try {
+            const response = await getMissingStickers();
+            setStickers(response.data);
+        } catch (error) {
+            console.error(error);
+            alert('Não foi possível carregar as suas figurinhas repetidas, tente novamente!');
+        }
     }
   
     useEffect(() => {
@@ -23,7 +28,7 @@ export default function Missing() {
             <Main>
                 <h1>Faltantes</h1>
                 <Container>
-                    {stickers.map(data => <Sticker key={data.id} data={data.stickers}/>)}
+                    {stickers.map(data => <Sticker key={data.id} userStickerId={data.id} data={data.stickers}/>)}
                 </Container>
             </Main>
             <Footer/>

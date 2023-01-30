@@ -69,6 +69,38 @@ export async function findMissingStickers(userId: number) {
     });
 }
 
+export async function updateDoubledSticker(userStickerId: number) {
+    return prisma.userStickers.updateMany({
+        where: {
+            id: userStickerId,
+            amount: {
+                gt: 0
+            }
+        },
+        data: {
+            amount: {
+                decrement: 1
+            }
+        }
+    });
+}
+
+export async function updateMissingSticker(userStickerId: number) {
+    return prisma.userStickers.updateMany({
+        where: {
+            id: userStickerId,
+            amount: {
+                equals: 0
+            }
+        },
+        data: {
+            amount: {
+                increment: 1
+            }
+        }
+    });
+}
+
 export async function deleteUserSticker(userStickerId: number) {
     return prisma.userStickers.delete({
         where: {

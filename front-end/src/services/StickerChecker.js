@@ -22,22 +22,22 @@ function Header() {
   return config;
 };
 
-function unmarkSticker(userStickerId) {
+function removeSticker(userStickerId) {
     const config = Header();
     const promise = axios.delete(`${URL_BASE}/${userStickerId}`, config);
     return promise;
 }
 
-function getUserUrls() {
+function removeDoubled(userStickerId) {
     const config = Header();
-    const promise = axios.get(`${URL_BASE}/users/me`, config);
+    const promise = axios.update(`${URL_BASE}/decrease/${userStickerId}`, config);
     return promise;
 }
 
-function deleteUrl(id) {
-    const config = Header();
-    const promise = axios.delete(`${URL_BASE}/urls/${id}`, config);
-    return promise;
+function addNewSticker(userStickerId) {
+  const config = Header();
+  const promise = axios.update(`${URL_BASE}/increase/${userStickerId}`, config);
+  return promise;
 }
 
 function getOwnedStickers() {
@@ -55,4 +55,4 @@ function getMissingStickers() {
   return promise;
 }
 
-export { postSignUp, postLogin, unmarkSticker, getOwnedStickers, getDoubledStickers, getMissingStickers };
+export { postSignUp, postLogin, removeSticker, removeDoubled, addNewSticker, getOwnedStickers, getDoubledStickers, getMissingStickers };

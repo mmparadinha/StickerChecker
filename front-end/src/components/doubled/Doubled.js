@@ -9,8 +9,13 @@ export default function Doubled() {
     const [stickers, setStickers] = useState([]);
 
     async function listDoubledStickers() {
-      const response = await getDoubledStickers();
-      setStickers(response.data);
+        try {
+            const response = await getDoubledStickers();
+            setStickers(response.data);
+        } catch (error) {
+            console.error(error);
+            alert('Não foi possível carregar as suas figurinhas repetidas, tente novamente!');
+        }
     }
   
     useEffect(() => {
@@ -23,7 +28,7 @@ export default function Doubled() {
             <Main>
                 <h1>Repetidas</h1>
                 <Container>
-                    {stickers.map(data => <Sticker key={data.id} data={data.stickers}/>)}
+                    {stickers.map(data => <Sticker key={data.id} userStickerId={data.id} data={data.stickers}/>)}
                 </Container>
             </Main>
             <Footer/>

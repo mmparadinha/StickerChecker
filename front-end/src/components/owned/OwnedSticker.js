@@ -1,17 +1,16 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { unmarkSticker } from "../../services/StickerChecker";
+import { removeSticker } from "../../services/StickerChecker";
 
 export default function Sticker({userStickerId, data}) {
     const [disabled, setDisabled] = useState(false);
     const stickerName = data.countries.name + ' ' + data.stickerNumber;
 
     async function unmarkOwned() { 
-        console.log(userStickerId)
         let confirmation = window.confirm(`Você tem certeza que deseja remover a figurinha ${stickerName} da sua lista?\nTODOS exemplares iguais serão removidos.\nPara remover apenas uma, utilize a aba de Repetidas`);
         if (confirmation) {
             try {
-                await unmarkSticker(userStickerId);
+                await removeSticker(userStickerId);
                 setDisabled(true);
             } catch (error) {
                 console.error(error);
@@ -42,6 +41,6 @@ const Main = styled.button`
     }
 
     &:disabled {
-        cursor: not-allowed;
+        cursor: default;
     }
 `;

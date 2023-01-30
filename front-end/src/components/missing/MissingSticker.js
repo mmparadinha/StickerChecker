@@ -1,17 +1,23 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { addNewSticker } from "../../services/StickerChecker";
 
-export default function Sticker({data}) {
-    const [disabled, setDisabled] = useState(false);
+//avaliar se vai ser necessário desabilitar a figurinha, por não atualizar a pagina sempre
 
-    function markOwned() { 
-        console.log(`agora eu tenho a figurinha ${data.stickerNumber}`);
-        setDisabled(true);
+export default function Sticker({userStickerId, data}) {
+    const stickerName = data.countries.name + ' ' + data.stickerNumber;
+
+    async function markSticker() { 
+        try {
+            await addNewSticker(userStickerId);
+        } catch (error) {
+            console.error(error);
+            alert('Não foi possível, tente novamente!');
+        }
     }
     
     return (
-        <Main disabled={disabled} onClick={markOwned}>
-            <p>{data.countries.name} {data.stickerNumber}</p>
+        <Main onClick={markSticker}>
+            <p>{stickerName}</p>
         </Main>
     );
 }

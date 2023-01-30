@@ -1,17 +1,23 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { removeDoubled } from "../../services/StickerChecker";
 
-export default function Sticker({data}) {
-    const [disabled, setDisabled] = useState(false);
+////avaliar se vai ser necessário desabilitar a figurinha, por não atualizar a pagina sempre
 
-    function markOwned() { 
-        console.log(`agora eu tenho a figurinha ${data.stickerNumber}`);
-        setDisabled(true);
+export default function Sticker({userStickerId, data}) {
+    const stickerName = data.countries.name + ' ' + data.stickerNumber;
+
+    async function decreaseDoubledSticker() { 
+        try {
+            await removeDoubled(userStickerId);
+        } catch (error) {
+            console.error(error);
+            alert('Não foi possível, tente novamente!');
+        }
     }
     
     return (
-        <Main disabled={disabled} onClick={markOwned}>
-            <p>{data.countries.name} {data.stickerNumber}</p>
+        <Main onClick={decreaseDoubledSticker}>
+            <p>{stickerName}</p>
         </Main>
     );
 }
@@ -28,9 +34,5 @@ const Main = styled.button`
 
     &:hover {
         cursor: pointer;
-    }
-
-    &:disabled {
-        cursor: not-allowed;
     }
 `;
