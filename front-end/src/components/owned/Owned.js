@@ -1,29 +1,34 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { getMissingStickers } from "../../services/StickerChecker.js";
+import { getOwnedStickers } from "../../services/StickerChecker.js";
 import Header from "../common/Header.js";
 import Footer from "../common/Footer.js";
-import Sticker from "./Sticker.js";
+import Sticker from "./OwnedSticker.js";
 
-export default function Missing() {
+export default function Owned() {
     const [stickers, setStickers] = useState([]);
 
-    async function listMissingStickers() {
-      const response = await getMissingStickers();
-      setStickers(response.data);
+    async function listOwnedStickers() {
+        try {
+            const response = await getOwnedStickers();
+            setStickers(response.data);
+        } catch (error) {
+            console.error(error);
+            alert('Não foi possível carregar a sua lista, tente novamente!');
+        }
     }
   
     useEffect(() => {
-        listMissingStickers();
+        listOwnedStickers();
     }, []);
 
     return (
         <>
             <Header/>
             <Main>
-                <h1>Faltantes</h1>
+                <h1>Obtidas</h1>
                 <Container>
-                    {stickers.map(data => <Sticker key={data.id} data={data.stickers}/>)}
+                    {stickers.map(data => <Sticker key={data.id} userStickerId={data.id} data={data.stickers}/>)}
                 </Container>
             </Main>
             <Footer/>

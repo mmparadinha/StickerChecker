@@ -2,9 +2,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GlobalStyle from "../GlobalStyles.js";
 import PrivatePage from "./PrivatePage.js";
 
-import Missing from "./main/Missing.js";
-import Owned from "./main/Owned.js";
-import Doubled from "./main/Doubled.js";
+import Missing from "./missing/Missing.js";
+import Owned from "./owned/Owned.js";
+import Doubled from "./doubled/Doubled.js";
 
 function App() {
   return (

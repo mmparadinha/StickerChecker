@@ -13,7 +13,7 @@ function postLogin(login) {
 };
 
 function Header() {
-  const authorization = JSON.parse(localStorage.getItem('shortly'));
+  const authorization = JSON.parse(localStorage.getItem('stickerchecker'));
   const config = {
     headers: {
       authorization: `Bearer ${authorization.token}`,
@@ -22,9 +22,9 @@ function Header() {
   return config;
 };
 
-function postUrl(url) {
+function unmarkSticker(userStickerId) {
     const config = Header();
-    const promise = axios.post(`${URL_BASE}/urls/shorten`, url, config);
+    const promise = axios.delete(`${URL_BASE}/${userStickerId}`, config);
     return promise;
 }
 
@@ -55,4 +55,4 @@ function getMissingStickers() {
   return promise;
 }
 
-export { postSignUp, postLogin, getOwnedStickers, getDoubledStickers, getMissingStickers };
+export { postSignUp, postLogin, unmarkSticker, getOwnedStickers, getDoubledStickers, getMissingStickers };

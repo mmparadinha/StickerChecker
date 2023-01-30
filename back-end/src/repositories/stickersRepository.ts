@@ -8,17 +8,10 @@ export async function findUserStickers(userId: number) {
                 gt: 0
             }
         },
-        select: {
+        include: {
             stickers: {
-                select: {
-                    id: true,
-                    stickerNumber: true,
-                    rarityId: true,
-                    countries: {
-                        select: {
-                            name: true
-                        }
-                    }
+                include: {
+                    countries: true
                 }
             }
         },
@@ -72,6 +65,14 @@ export async function findMissingStickers(userId: number) {
             stickers: {
                 stickerNumber: "asc"
             }
+        }
+    });
+}
+
+export async function deleteUserSticker(userStickerId: number) {
+    return prisma.userStickers.delete({
+        where: {
+            id: userStickerId
         }
     });
 }

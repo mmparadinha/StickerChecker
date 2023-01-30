@@ -8,6 +8,6 @@ stickersRouter.get('/doubled', getDoubledStickers);
 stickersRouter.get('/missing', getMissingStickers);
 stickersRouter.post('/', createSpecialSticker);
 stickersRouter.put('/', updateStickerCount);
-stickersRouter.delete('/', deleteSticker);
+stickersRouter.delete('/:stickerId', deleteSticker);
 
 export default stickersRouter;

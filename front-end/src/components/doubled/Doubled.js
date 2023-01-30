@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { getDoubledStickers } from "../../services/StickerChecker.js";
 import Header from "../common/Header.js";
 import Footer from "../common/Footer.js";
-import Sticker from "./Sticker.js";
+import Sticker from "./DoubledSticker.js";
 
 export default function Doubled() {
     const [stickers, setStickers] = useState([]);

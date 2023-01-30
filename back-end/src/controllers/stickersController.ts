@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { findUserStickers, findDoubledStickers, findMissingStickers } from "../repositories/stickersRepository";
+import { findUserStickers, findDoubledStickers, findMissingStickers, deleteUserSticker } from "../repositories/stickersRepository";
 
 export async function getOwnedStickers(req: Request, res: Response) {
     const userId = 5;
@@ -50,7 +50,6 @@ export async function getMissingStickers(req: Request, res: Response) {
     } catch (error) {
         console.error(error);
         res.sendStatus(500);
-        return;
     }
 }
 
@@ -63,5 +62,17 @@ export async function updateStickerCount(req: Request, res: Response) {
 }
 
 export async function deleteSticker(req: Request, res: Response) {
+    const userStickerId = Number(req.params.userStickerId);
+    const userId = 5; //garantir se é o dono deletando
 
+    try {
+        await deleteUserSticker(userStickerId);
+        
+        res.status(204);
+        return;
+
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    }
 }
