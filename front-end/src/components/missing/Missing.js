@@ -7,6 +7,7 @@ import Sticker from "./MissingSticker.js";
 
 export default function Missing() {
     const [stickers, setStickers] = useState([]);
+    const activeFooter = { missing: true};
 
     async function listMissingStickers() {
         try {
@@ -31,7 +32,7 @@ export default function Missing() {
                     {stickers.map(data => <Sticker key={data.id} userStickerId={data.id} data={data.stickers}/>)}
                 </Container>
             </Main>
-            <Footer/>
+            <Footer params={activeFooter}/>
         </>
     );
 }

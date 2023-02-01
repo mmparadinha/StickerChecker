@@ -7,6 +7,7 @@ import Sticker from "./DoubledSticker.js";
 
 export default function Doubled() {
     const [stickers, setStickers] = useState([]);
+    const activeFooter = { doubled: true};
 
     async function listDoubledStickers() {
         try {
@@ -28,10 +29,10 @@ export default function Doubled() {
             <Main>
                 <h1>Repetidas</h1>
                 <Container>
-                    {stickers.map(data => <Sticker key={data.id} userStickerId={data.id} data={data.stickers}/>)}
+                    {stickers.map(data => <Sticker key={data.id} data={data}/>)}
                 </Container>
             </Main>
-            <Footer/>
+            <Footer params={activeFooter}/>
         </>
     );
 }

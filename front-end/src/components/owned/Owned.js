@@ -7,6 +7,7 @@ import Sticker from "./OwnedSticker.js";
 
 export default function Owned() {
     const [stickers, setStickers] = useState([]);
+    const activeFooter = { owned: true };
 
     async function listOwnedStickers() {
         try {
@@ -28,10 +29,10 @@ export default function Owned() {
             <Main>
                 <h1>Obtidas</h1>
                 <Container>
-                    {stickers.map(data => <Sticker key={data.id} userStickerId={data.id} data={data.stickers}/>)}
+                    {stickers.map(data => <Sticker key={data.id} data={data}/>)}
                 </Container>
             </Main>
-            <Footer/>
+            <Footer params={activeFooter}/>
         </>
     );
 }
