@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const URL_BASE = 'http://localhost:4000';
+const URL_BASE = process.env.REACT_APP_API_BASE_URL;
 
 function postSignUp(registration) {
   const promise = axios.post(`${URL_BASE}/signup`, registration);

@@ -51,12 +51,12 @@ export async function signInUser(req: Request, res: Response) {
 
         if (user && passwordCheck) {
             const session = await checkSession(user.id);
-            console.log(session)
 
             if (session) {
                 res.status(200).send({
                     token: session.token,
-                    username: user.username
+                    username: user.username,
+                    userId: user.id
                 });
                 return;
 
@@ -70,7 +70,8 @@ export async function signInUser(req: Request, res: Response) {
 
                 res.status(200).send({
                     token,
-                    username: user.username
+                    username: user.username,
+                    userId: user.id
                 });
                 return;
             }

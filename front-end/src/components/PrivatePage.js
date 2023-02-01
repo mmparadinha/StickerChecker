@@ -3,12 +3,12 @@ import { useEffect } from "react";
 
 function PrivatePage() {
     const navigate = useNavigate();
-    const token = localStorage.getItem('linkr-token');
+    const token = localStorage.getItem('sticker-checker');
 
     useEffect(() => {
         if (token === null) {
             alert('Ooops, something went wrong! Please, try again.');
-            localStorage.clear('linkr-token');
+            localStorage.clear('sticker-checker');
             navigate('/');
         }
     }, []);

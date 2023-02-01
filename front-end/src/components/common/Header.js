@@ -1,13 +1,15 @@
-
+import { useContext } from "react";
 import styled from "styled-components";
+import UserContext from "../../context/UserContext";
 
 export default function Header() {
+  const { userInfo } = useContext(UserContext);
 
     return (
       <Main>
         <h2>Função de troca</h2>
         <h2>Nome do álbum - Status do álbum</h2>
-        <h2>Nome de usuário</h2>
+        <h2>{userInfo.username}</h2>
       </Main>
       );
 }

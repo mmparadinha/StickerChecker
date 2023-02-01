@@ -5,22 +5,33 @@ import PrivatePage from "./PrivatePage.js";
 import Missing from "./missing/Missing.js";
 import Owned from "./owned/Owned.js";
 import Doubled from "./doubled/Doubled.js";
+import SignUp from "./login/SignUp.js";
+import SignIn from "./login/SignIn.js";
+
+import { useState } from "react";
+import UserContext from "../context/UserContext.js";
 
 function App() {
+  const [ userInfo, setUserInfo ] = useState(
+    JSON.parse(localStorage.getItem("sticker-checker")) || null
+  );
+
   return (
     <>
       <GlobalStyle/>
+      <UserContext.Provider value={ {userInfo, setUserInfo} }>
       <BrowserRouter>
         <Routes>
-          <Route path="/missing" element={<Missing />}/>
-          <Route path="/" element={<Owned />}/>
-          <Route path="/doubled" element={<Doubled />}/>
+          <Route path="/" element={<SignIn />}/>
+          <Route path="/signup" element={<SignUp />}/>
           <Route element={<PrivatePage />}>
-
+            <Route path="/missing" element={<Missing />}/>
+            <Route path="/owned" element={<Owned />}/>
+            <Route path="/doubled" element={<Doubled />}/>
           </Route>
         </Routes>
       </BrowserRouter>
-      
+      </UserContext.Provider>
     </>
   );
 }
