@@ -1,11 +1,8 @@
 import prisma from "../database/database";
-import { QueryResult } from "pg";
 import { UserEntity, User } from "../protocols/User";
 import { SessionEntity, Session } from "../protocols/Session";
 
-//conferir o retorno de cada modificação via prisma para tipar pelo TS
-
-export async function searchUser(email: string): Promise<User> {
+export async function searchUser(email: string): Promise<UserEntity> {
     return prisma.users.findUnique({
         where: {
             email
@@ -13,8 +10,10 @@ export async function searchUser(email: string): Promise<User> {
     });
 }
 
-export async function searchUserBySession(token: string): Promise<(User & {sessions: Session[];})[]> {
-    return prisma.users.findMany({
+//conferir o retorno de cada modificação via prisma para tipar pelo TS
+//bug fix: findMany retorna todos, findFirst retorna sem conferir o token
+export async function searchUserBySession(token: string) {
+    return prisma.users.findFirst({
         include: {
             sessions: {
                 where: {
@@ -25,7 +24,7 @@ export async function searchUserBySession(token: string): Promise<(User & {sessi
     });
 }
 
-export async function insertNewUser(newUser: User) {
+export async function insertNewUser(newUser: User): Promise<UserEntity> {
     return prisma.users.create({
         data: {
             username: newUser.username,
@@ -35,15 +34,15 @@ export async function insertNewUser(newUser: User) {
     });
 }
 
-export async function checkSession(userId: number) {
-    return prisma.sessions.findMany({
+export async function checkSession(userId: number): Promise<SessionEntity>{
+    return prisma.sessions.findFirst({
         where: {
             userId
         }
     });
 }
 
-export async function insertNewSession(newSession: Session) {
+export async function insertNewSession(newSession: Session): Promise<SessionEntity> {
     return prisma.sessions.create({
         data: {
             userId: newSession.userId,
@@ -52,6 +51,7 @@ export async function insertNewSession(newSession: Session) {
     });
 }
 
+//conferir o retorno de cada modificação via prisma para tipar pelo TS
 export async function removeUser(email: string) {
     return prisma.users.delete({
         where: {
@@ -60,6 +60,7 @@ export async function removeUser(email: string) {
     });
 }
 
+//conferir o retorno de cada modificação via prisma para tipar pelo TS
 export async function changeUsername(username: string, email: string) {
     return prisma.users.update({
         where: {
@@ -71,14 +72,13 @@ export async function changeUsername(username: string, email: string) {
     });
 }
 
-export async function getUserStats(userId: number) {
+export async function getUserOwnedStatus(userId: number): Promise<number> {
     return prisma.userStickers.count({
         where: {
-            userId
+            userId,
+            amount: {
+                gt: 0
+            }
         }
     });
-}
-
-export async function getUsers() {
-    return prisma.users.findMany();
 }
