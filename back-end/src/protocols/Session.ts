@@ -1,5 +1,5 @@
 export type SessionEntity = {
-    id?: number,
+    id: number,
     userId: number,
     token: string
 }

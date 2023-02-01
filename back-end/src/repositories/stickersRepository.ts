@@ -101,10 +101,13 @@ export async function updateMissingSticker(userStickerId: number) {
     });
 }
 
-export async function deleteUserSticker(userStickerId: number) {
-    return prisma.userStickers.delete({
+export async function resetUserSticker(userStickerId: number) {
+    return prisma.userStickers.update({
         where: {
             id: userStickerId
+        },
+        data: {
+            amount: 0
         }
     });
 }

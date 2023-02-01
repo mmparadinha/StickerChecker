@@ -1,69 +1,84 @@
 import prisma from "../database/database";
 import { QueryResult } from "pg";
-import { User, UserEntity } from "../protocols/User";
-import { Session, SessionEntity } from "../protocols/Session";
+import { UserEntity, User } from "../protocols/User";
+import { SessionEntity, Session } from "../protocols/Session";
 
-// export async function searchUser(email: string): Promise<QueryResult<UserEntity>> {
-//     return connection.query(`
-//         SELECT * FROM users WHERE users.email=$1
-//     ;`, [email])
-// }
+//conferir o retorno de cada modificação via prisma para tipar pelo TS
 
-// export async function searchUserBySession(token: string): Promise<QueryResult<UserEntity>> {
-//     return connection.query(`
-//         SELECT
-//             users.*
-//         FROM users
-//         JOIN sessions ON users.id=sessions."userId"
-//         WHERE sessions.token=$1
-//     ;`, [token])
-// }
+export async function searchUser(email: string): Promise<User> {
+    return prisma.users.findUnique({
+        where: {
+            email
+        }
+    });
+}
 
-// export async function insertNewUser(newUser: User): Promise<QueryResult<UserEntity>> {
-//     return connection.query(`
-//         INSERT INTO users (username, email, password) VALUES ($1, $2, $3)
-//     ;`, [newUser.username, newUser.email, newUser.password])
-// }
+export async function searchUserBySession(token: string): Promise<(User & {sessions: Session[];})[]> {
+    return prisma.users.findMany({
+        include: {
+            sessions: {
+                where: {
+                    token
+                }
+            }
+        }
+    });
+}
 
-// export async function checkSession(email: string): Promise<QueryResult<SessionEntity>> {
-//     return connection.query(`
-//         SELECT
-//             sessions.*
-//         FROM sessions
-//         JOIN users ON sessions."userId"=users.id
-//         WHERE users.email=$1
-//     ;`, [email]);
-// }
+export async function insertNewUser(newUser: User) {
+    return prisma.users.create({
+        data: {
+            username: newUser.username,
+            email: newUser.email,
+            password: newUser.password
+        }
+    });
+}
 
-// export async function insertNewSession(newSession: Session): Promise<QueryResult<SessionEntity>> {
-//     return connection.query(`
-//         INSERT INTO sessions ("userId", token) VALUES ($1, $2)
-//     ;`, [newSession.userId, newSession.token]);
-// }
+export async function checkSession(userId: number) {
+    return prisma.sessions.findMany({
+        where: {
+            userId
+        }
+    });
+}
 
-// export async function removeUser(email: string): Promise<QueryResult> {
-//     return connection.query(`
-//         DELETE FROM users WHERE users.email=$1
-//     ;`, [email]);
-// }
+export async function insertNewSession(newSession: Session) {
+    return prisma.sessions.create({
+        data: {
+            userId: newSession.userId,
+            token: newSession.token
+        }
+    });
+}
 
-// export async function changeUsername(username: string, email: string): Promise<QueryResult> {
-//     return connection.query(`
-//         UPDATE users SET username=$1 WHERE users.email=$2
-//     ;`, [username, email]);
-// }
+export async function removeUser(email: string) {
+    return prisma.users.delete({
+        where: {
+            email
+        }
+    });
+}
 
-// export async function getUserStats(email: string): Promise<QueryResult> {
-//     return connection.query(`
-//         SELECT
-//             COUNT("stickerId") as "ownedStickers"
-//         FROM "userStickers"
-//         JOIN users ON "userStickers"."userId"=users.id
-//         WHERE users.email=$1
-//     ;`, [email]);
-// }
+export async function changeUsername(username: string, email: string) {
+    return prisma.users.update({
+        where: {
+            email
+        },
+        data: {
+            username
+        }
+    });
+}
 
-// export async function getUserInfo(): Promise<QueryResult> {
-//     return prisma.users.findMany()
-//     ;
-// }
+export async function getUserStats(userId: number) {
+    return prisma.userStickers.count({
+        where: {
+            userId
+        }
+    });
+}
+
+export async function getUsers() {
+    return prisma.users.findMany();
+}
