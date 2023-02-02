@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { useContext } from 'react';
+import UserContext from '../context/UserContext';
 
 const URL_BASE = process.env.REACT_APP_API_BASE_URL;
 
@@ -13,10 +15,11 @@ function postLogin(login) {
 };
 
 function Header() {
-  const authorization = JSON.parse(localStorage.getItem('stickerchecker'));
+  const { userInfo } = useContext(UserContext);
+  const token = userInfo?.token;
   const config = {
     headers: {
-      authorization: `Bearer ${authorization.token}`,
+      authorization: `Bearer ${token}`,
     }
   };
   return config;

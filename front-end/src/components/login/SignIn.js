@@ -1,22 +1,20 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import UserRegistration from "./SignUp";
-import UserContext from "../../context/UserContext.js";
 import { postLogin } from "../../services/StickerChecker.js";
+import UserContext from "../../context/UserContext";
 
 export default function SignIn() {
   const navigate = useNavigate();
+  const { userInfo, setUserInfo } = useContext(UserContext);
   const [sending, setSending] = useState(false);
-  const [clicado, setClicado] = useState(false);
   const [login, setLogin] = useState({
     email: "",
     password: ""
   });
-  const { setUserInfo } = useContext(UserContext);
 
   useEffect(() => {
-    if (localStorage.getItem("sticker-checker") !== null) {
+    if (userInfo?.token !== undefined) {
       navigate("/owned");
     }
   }, [navigate]);
@@ -38,14 +36,9 @@ export default function SignIn() {
     setSending(true);
     try {
       const response = await postLogin(login);
-      localStorage.setItem("sticker-checker", JSON.stringify({
-        token: response.token,
-        username: response.username
-      }));
-      setUserInfo({
-        ...response,
-      })
-      navigate("/owned");
+      localStorage.setItem("sticker-checker", JSON.stringify(response.data));
+      setUserInfo(response.data)
+      //navigate("/owned");
     } catch (error) {
       resetForm();
       alert("Não foi possível logar, tente novamente");
@@ -53,229 +46,207 @@ export default function SignIn() {
     }
   };
 
-  function registryAccess() {
-    if (!clicado) {
-      return (
-        <SignupComponents>
-          <DescriptionComponents>
-            <div className="description">
-              <h1>linkr</h1>
-              <p>
-                save, share and discover <br /> the best links on the web
-              </p>
-            </div>
-          </DescriptionComponents>
-          <RegistrationData>
-            <form onSubmit={logIn}>
-              <label>
-                <input
-                  id="formEmail"
-                  type="email"
-                  name="email"
-                  placeholder="e-mail"
-                  onChange={updateInput}
-                  value={login.email}
-                  required
-                />
-              </label>
-              <label>
-                <input
-                  id="forPassword"
-                  type="password"
-                  name="password"
-                  placeholder="password"
-                  onChange={updateInput}
-                  value={login.password}
-                  required
-                />
-              </label>
-              <button>Log In</button>
-              <p onClick={() => setClicado(true)}>
-                First time? Create an account!
-              </p>
-            </form>
-          </RegistrationData>
-        </SignupComponents>
-      );
-    }
-
-    if (clicado) {
-      return (
-        <UserRegistration
-          SignupComponents={SignupComponents}
-          DescriptionComponents={DescriptionComponents}
-          RegistrationData={RegistrationData}
-          setClicado={setClicado}
-          navigate={navigate}
-        />
-      );
-    }
-  }
-
-  return <>{registryAccess()}</>;
+  return (
+    <Main>
+      <DescriptionContainer>
+        <h1>Sticker Checker</h1>
+        <p>acompanhe o progresso do seu álbum da forma mais prática possível</p>
+      </DescriptionContainer>
+      <RegistrationData>
+        <FormBox onSubmit={logIn}>
+          <input
+            type="email"
+            name="email"
+            placeholder="e-mail"
+            onChange={updateInput}
+            value={login.email}
+            required
+            disabled={sending}
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="senha"
+            onChange={updateInput}
+            value={login.password}
+            required
+            disabled={sending}
+          />
+          <button>Entrar</button>
+        </FormBox>
+        <p onClick={() => navigate("/signup")}>
+          Primeria vez? Crie a sua conta!
+        </p>
+      </RegistrationData>
+    </Main>
+  );
 }
 
-const SignupComponents = styled.div`
+const Main = styled.div`
   display: flex;
-  flex-direction: row;
+
   @media (max-width: 645px) {
     flex-direction: column;
   }
 `;
 
-const DescriptionComponents = styled.div`
-  width: 65vw;
+const DescriptionContainer = styled.div`
+  width: 60vw;
   height: 100vh;
-  background-color: #151515;
+
+  background-color: yellow;
+  color: #000080;
+  padding: 15px;
+  gap: 20px;
+
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  color: white;
+
   h1 {
     font-size: 106px;
-    font-family: "Passion One";
+    font-weight: 700;
   }
+
   p {
-    width: 435px;
     font-size: 43px;
-    font-family: "Oswald";
-    line-height: 64px;
     font-weight: 400;
+    line-height: 64px;
   }
-  @media (max-width: 950px) {
-    width: 50%;
+
+  @media (max-width: 1050px) {
     h1 {
-      font-size: 80px;
+      font-size: 66px;
+      font-weight: 700;
     }
+
     p {
-      width: 250px;
-      font-size: 25px;
-      line-height: 50px;
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 33px;
     }
   }
+  
   @media (max-width: 645px) {
-    width: 100%;
-    height: 175px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    position: fixed;
-    .description {
-      width: 100%;
-      font-size: 23px;
-      line-height: 34.09px;
-      text-align: center;
-    }
-    h1 {
-      width: 100%;
-      font-size: 76px;
-      line-height: 83.86px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    @media (max-width: 645px) {
-      width: 100%;
-      height: 175px;
-      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-      position: fixed;
-      .description {
-        width: 100%;
-        font-size: 23px;
-        text-align: center;
-      }
-      h1 {
-        width: 100%;
-        font-size: 76px;
-        line-height: 83.86px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      p {
-        font-size: 23px;
-        width: 100%;
-        text-align: center;
-        line-height: 25px;
-      }
-    }
+    width: 100vw;
+    height: 35vh;
+    justify-content: center;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 66px;
+    font-weight: 700;
+  }
+
+  p {
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 33px;
   }
 `;
 
 const RegistrationData = styled.div`
-  width: 35vw;
-  background-color: #333333;
+  width: 40vw;
+
+  background-color: blue;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 20px;
-  input {
-    width: 100%;
-    height: 65px;
-    border: 0;
-    border-radius: 6px;
-    background-color: white;
-    padding-left: 15px;
-    margin-bottom: 15px;
-    font-family: "Oswald";
-    font-size: 27px;
-    color: #9f9f9f;
-    font-weight: 700;
-  }
-  button {
-    width: 100%;
-    height: 65px;
-    background-color: #1877f2;
-    border: 0;
-    border-radius: 6px;
-    color: white;
-    font-family: "Oswald";
-    font-size: 27px;
-    font-weight: 700;
-    margin-bottom: 20px;
-    cursor: pointer;
-  }
+
   p {
-    width: 100%;
+    margin: 0 auto;
+    background-color:red;
     color: white;
     font-size: 20px;
-    font-family: "Lato";
     font-weight: 400;
-    display: flex;
-    justify-content: center;
-    text-decoration: underline;
-    cursor: pointer;
+    
+    text-align: center;
+
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
   }
-  @media (max-width: 950px) {
-    width: 50vw;
-    input {
-      height: 45px;
-      font-size: 18px;
-    }
-    button {
-      height: 45px;
-      font-size: 18px;
-    }
+
+  @media (max-width: 1050px) {
     p {
       font-size: 14px;
     }
   }
+
+  @media (max-width: 645px) {
+    width: 100vw;
+    height: 65vh;
+    justify-content: center;
+
+    p {
+      font-size: 17px;
+    }
+  }
+`;
+
+const FormBox = styled.form`
+  gap: 15px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  background-color: pink;
+
+  input {
+    width: 100%;
+    height: 65px;
+    padding: 10px;
+
+    border: none;
+    border-radius: 6px;
+
+    background-color: white;
+    color: #9f9f9f;
+    font-size: 27px;
+    font-weight: 700;
+  }
+
+  button {
+    width: 100%;
+    height: 65px;
+    padding: 10px;
+
+    border: none;
+    border-radius: 6px;
+
+    background-color: #1877f2;
+    color: white;
+    font-size: 27px;
+    font-weight: 700;
+
+    &:hover {
+      cursor: auto;
+    }
+  }
+
+  @media (max-width: 1050px) {
+    input {
+      height: 45px;
+      font-size: 18px;
+    }
+    button {
+      height: 45px;
+      font-size: 18px;
+    }
+  }
+
   @media (max-width: 645px) {
     width: 100%;
-    margin-top: 215px;
-    padding: 20px;
+
     input {
-      width: 100%;
       height: 55px;
       font-size: 22px;
     }
     button {
-      width: 100%;
       height: 55px;
       font-size: 22px;
-    }
-    p {
-      width: 100%;
-      font-size: 17px;
-      line-height: 20.4px;
     }
   }
 `;

@@ -12,9 +12,7 @@ import { useState } from "react";
 import UserContext from "../context/UserContext.js";
 
 function App() {
-  const [ userInfo, setUserInfo ] = useState(
-    JSON.parse(localStorage.getItem("sticker-checker")) || null
-  );
+  const [ userInfo, setUserInfo ] = useState(JSON.parse(localStorage.getItem("sticker-checker")));
 
   return (
     <>

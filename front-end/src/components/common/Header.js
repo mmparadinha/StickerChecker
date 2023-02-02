@@ -9,7 +9,7 @@ export default function Header() {
       <Main>
         <h2>Função de troca</h2>
         <h2>Nome do álbum - Status do álbum</h2>
-        <h2>{userInfo.username}</h2>
+        <h2>{userInfo?.username}</h2>
       </Main>
       );
 }

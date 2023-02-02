@@ -1,21 +1,24 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useContext } from "react";
+import UserContext from "../context/UserContext";
 
 function PrivatePage() {
     const navigate = useNavigate();
-    const token = localStorage.getItem('sticker-checker');
+    const { userInfo } = useContext(UserContext);
+    const token = userInfo?.token;
 
     useEffect(() => {
-        if (token === null) {
-            alert('Ooops, something went wrong! Please, try again.');
-            localStorage.clear('sticker-checker');
-            navigate('/');
+        if (token === undefined) {
+            alert("Opa, algo deu errado! Tente novamente");
+            localStorage.clear("sticker-checker");
+            navigate("/");
         }
     }, []);
 
     return (
         <>
-            {token !== null ? <Outlet/> : navigate('/')}
+            {token && <Outlet/>}
         </>
     );
 };
