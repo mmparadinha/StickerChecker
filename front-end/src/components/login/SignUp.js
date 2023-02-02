@@ -1,105 +1,114 @@
-import { useState } from "react";
-import axios from "axios";
+import { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { postSignUp } from "../../services/StickerChecker";
+import UserContext from "../../context/UserContext";
+import { Input } from "./Input";
+import { Button } from "./Button";
+import { FormContainer } from "./Form";
+import { Description } from "./Description";
 
-export default function SignUp({
-  SignupComponents,
-  DescriptionComponents,
-  RegistrationData,
-  setClicado,
-}) {
+export default function SignUp() {
+  const navigate = useNavigate();
+  const { userInfo } = useContext(UserContext);
+  const [sending, setSending] = useState(false);
+  const [registration, setRegistration] = useState({
+    email: "",
+    username: "",
+    password: "",
+    passwordConfirmation: ""
+  });
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
-  const [url, setUrl] = useState("");
+  useEffect(() => {
+    if (userInfo?.token !== undefined) {
+      navigate("/owned");
+    }
+  }, [navigate]);
 
-  function handleForm(e) {
-    e.preventDefault();
-    const dadosDeCadastro = {
-      email,
-      password,
-      username,
-      pictureUrl: url,
-    };
-    console.log("Oiiiiieee: ", dadosDeCadastro)
+  function updateInput(e) {
+    setRegistration({ ...registration, [e.target.name]: e.target.value });
+  };
 
-    const promise = axios.post(`${process.env.REACT_APP_API_BASE_URL}/signup`, dadosDeCadastro);
-
-    promise.then((res) => {
-      console.log("222222222: ", res)
-      restForm();
-      setClicado(false);
+  function resetForm() {
+    setRegistration({
+      username: "",
+      email: "",
+      password: "",
+      passwordConfirmation: ""
     });
-    promise.catch((err) => {
-      console.log(err);
-    })
+    setSending(false);
   }
 
-  function restForm() {
-    setEmail('');
-    setPassword('');
-    setUsername('');
-    setUrl('');
-  }
+  async function signUp(e) {
+    e.preventDefault(e);
+    setSending(true);
+    try {
+      await postSignUp(registration);
+      setSending(false);
+      navigate('/');
+    } catch (error) {
+      alert('Não foi possível finalizar seu cadastro, tente novamente');
+      console.error(error);
+      resetForm();
+    }
+  };
 
   return (
-    <SignupComponents>
-      <DescriptionComponents>
-        <div className="description">
-          <h1>linkr</h1>
-          <p>save, share and discover<br />the best links on the web</p>
-        </div>
-      </DescriptionComponents>
-      <RegistrationData>
-        <form onSubmit={handleForm}>
-          <label>
-            <input
-              type="text"
-              name='email'
-              placeholder="e-mail"
-              onChange={(e) => { setEmail(e.target.value) }}
-              value={email}
-              required
-            />
-          </label>
-          <label>
-            <input
-              type="password"
-              name='password'
-              placeholder="password"
-              onChange={(e) => { setPassword(e.target.value) }}
-              value={password}
-              required
-            />
-          </label>
-          <label>
-            <input
-              type="text"
-              name='name'
-              placeholder="username"
-              onChange={(e) => { setUsername(e.target.value) }}
-              value={username}
-              required
-            />
-          </label>
-          <label>
-            <input
-              type="text"
-              name='url'
-              placeholder="picture url"
-              onChange={(e) => { setUrl(e.target.value) }}
-              value={url}
-              required
-            />
-          </label>
-          <button>Sign Up</button>
-          <p onClick={() => {
-            setClicado(false);
-          }}>Switch back to log in</p>
-        </form>
-      </RegistrationData>
-    </SignupComponents>
+    <Main>
+      <Description/>
+
+      <FormContainer onSubmit={signUp}>
+        <Input
+          disabled={sending}
+          required
+          type='text'
+          name='username'
+          value={registration.username}
+          onChange={updateInput}
+          placeholder='Nome'
+        />
+        <Input
+          disabled={sending}
+          required
+          type='email'
+          name='email'
+          value={registration.email}
+          onChange={updateInput}
+          placeholder='E-mail'
+        />
+        <Input
+          disabled={sending}
+          required
+          type='password'
+          name='password'
+          value={registration.password}
+          onChange={updateInput}
+          placeholder='Senha'
+        />
+        <Input
+          disabled={sending}
+          required
+          type='password'
+          name='passwordConfirmation'
+          value={registration.passwordConfirmation}
+          onChange={updateInput}
+          placeholder='Confirmar senha'
+        />
+        <Button type='submit' disabled={sending}> {sending ? 'Carregando...' : 'Criar conta'} </Button>
+        <p onClick={() => navigate("/")}>
+          Já possui conta? Acesse!
+        </p>
+      </FormContainer>
+
+
+    </Main>
   );
+}
 
-};
+const Main = styled.div`
+  display: flex;
 
+  @media (max-width: 645px) {
+    flex-direction: column;
+  }
+`;

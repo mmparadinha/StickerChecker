@@ -4,7 +4,7 @@ export const userSignUpSchema = Joi.object({
   username: Joi.string().required(),
   email: Joi.string().email().required(),
   password: Joi.string().required(),
-  confirmPassword: Joi.string().required().valid(Joi.ref('password'))
+  passwordConfirmation: Joi.string().required().valid(Joi.ref('password'))
 });
 
 export const userSignInSchema = Joi.object({
