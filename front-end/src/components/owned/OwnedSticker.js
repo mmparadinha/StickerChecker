@@ -7,7 +7,8 @@ export default function Sticker({ data }) {
     const [disabled, setDisabled] = useState(false);
     const stickerName = data.stickers.countries.name + ' ' + data.stickers.stickerNumber;
 
-    async function unmarkOwned() { 
+    async function unmarkOwned(e) {
+        e.stopPropagation();
         let confirmation = window.confirm(`Você tem certeza que deseja remover a figurinha ${stickerName} da sua lista?\nTODOS exemplares iguais serão removidos.\nPara remover apenas uma, utilize a aba de Repetidas`);
         if (confirmation) {
             try {
@@ -20,7 +21,6 @@ export default function Sticker({ data }) {
         }
     }
 
-    //bug fix: executando as duas funções quando clica para deletar a figurinha
     async function markSticker() { 
         try {
             await addNewSticker(data.id);
@@ -32,9 +32,7 @@ export default function Sticker({ data }) {
     
     return (
         <Main disabled={disabled} onClick={markSticker}>
-            <Teste>
-                <DeleteButton onClick={unmarkOwned}/>
-            </Teste>
+            <DeleteButton onClick={unmarkOwned}/>
             <p>{stickerName}</p>
             <AmountContainer>{data.amount}</AmountContainer>
         </Main>
@@ -61,14 +59,10 @@ const Main = styled.button`
     }
 `;
 
-const Teste = styled.div`
+const DeleteButton = styled(FiDelete)`
     position: absolute;
     top: 3px;
     right: 3px;
-`;
-
-const DeleteButton = styled(FiDelete)`
-    
     font-size: 24px;
     color: darkred;
 `;

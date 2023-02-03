@@ -1,6 +1,24 @@
 import prisma from "../database/database";
 
-export async function findUserStickers(userId: number) {
+//tipar os retornos das queries
+
+export async function findStickers() {
+    return prisma.stickers.findMany({
+        where: {
+            rarityId: {
+                equals: 1
+            }
+        },
+        include: {
+            countries: true
+        },
+        orderBy: {
+            stickerNumber: "asc"
+        }
+    });
+}
+
+export async function findAllUserStickers(userId: number) {
     return prisma.userStickers.findMany({
         where: {
             userId,
@@ -46,29 +64,6 @@ export async function findDoubledStickers(userId: number) {
     });
 }
 
-export async function findMissingStickers(userId: number) {
-    return prisma.userStickers.findMany({
-        where: {
-            userId,
-            amount: {
-                equals: 0
-            }
-        },
-        include: {
-            stickers: {
-                include: {
-                    countries: true
-                }
-            }
-        },
-        orderBy: {
-            stickers: {
-                stickerNumber: "asc"
-            }
-        }
-    });
-}
-
 export async function updateDoubledSticker(userStickerId: number) {
     return prisma.userStickers.updateMany({
         where: {
@@ -85,13 +80,29 @@ export async function updateDoubledSticker(userStickerId: number) {
     });
 }
 
-export async function updateMissingSticker(userStickerId: number) {
-    return prisma.userStickers.updateMany({
+export async function findSingleUserSticker(userId: number, stickerId: number) {
+    return prisma.userStickers.findFirst({
         where: {
-            id: userStickerId,
-            amount: {
-                equals: 0
-            }
+            userId,
+            stickerId
+        }
+    });
+}
+
+export async function createUserSticker(userId: number, stickerId: number) {
+    return prisma.userStickers.create({
+        data: {
+            userId,
+            stickerId,
+            amount: 1
+        }
+    });
+}
+
+export async function updateMissingSticker(userStickerId: number) {
+    return prisma.userStickers.update({
+        where: {
+            id: userStickerId
         },
         data: {
             amount: {
@@ -101,10 +112,11 @@ export async function updateMissingSticker(userStickerId: number) {
     });
 }
 
-export async function resetUserSticker(userStickerId: number) {
-    return prisma.userStickers.update({
+export async function resetUserSticker(userId: number, stickerId: number) {
+    return prisma.userStickers.updateMany({
         where: {
-            id: userStickerId
+            userId,
+            stickerId
         },
         data: {
             amount: 0

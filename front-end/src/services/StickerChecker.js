@@ -44,17 +44,21 @@ function addNewSticker(userStickerId) {
 }
 
 function getOwnedStickers() {
-  const promise = axios.get(`${URL_BASE}/owned`);
+  const config = Header();
+  const promise = axios.get(`${URL_BASE}/owned`, config);
   return promise;
 }
 
 function getDoubledStickers() {
-  const promise = axios.get(`${URL_BASE}/doubled`);
+  const config = Header();
+  const promise = axios.get(`${URL_BASE}/doubled`, config);
   return promise;
 }
 
 function getMissingStickers() {
-  const promise = axios.get(`${URL_BASE}/missing`);
+  const config = Header();
+  console.log(config)
+  const promise = axios.get(`${URL_BASE}/missing`, config);
   return promise;
 }
 

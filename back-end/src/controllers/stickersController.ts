@@ -1,10 +1,12 @@
-import { Request, Response } from "express";
-import { findUserStickers, findDoubledStickers, findMissingStickers, updateDoubledSticker, resetUserSticker } from "../repositories/stickersRepository";
+import { Response } from "express";
+import { AuthenticatedRequest } from "../middlewares/authenticationMiddleware";
+import { findAllUserStickers, findDoubledStickers, updateDoubledSticker, createUserSticker, updateMissingSticker, resetUserSticker, findStickers, findSingleUserSticker } from "../repositories/stickersRepository";
 
-export async function getOwnedStickers(req: Request, res: Response) {
-    const userId = 5;
+export async function getOwnedStickers(req: AuthenticatedRequest, res: Response) {
+    const { userId } = req;
+
     try {
-        const ownedStickers = await findUserStickers(userId);
+        const ownedStickers = await findAllUserStickers(userId);
         if (!ownedStickers) {
             return res.sendStatus(400);
         }
@@ -18,8 +20,8 @@ export async function getOwnedStickers(req: Request, res: Response) {
     }
 }
 
-export async function getDoubledStickers(req: Request, res: Response) {
-    const userId = 5;
+export async function getDoubledStickers(req: AuthenticatedRequest, res: Response) {
+    const { userId } = req;
 
     try {
         const doubledStickers = await findDoubledStickers(userId);
@@ -36,15 +38,28 @@ export async function getDoubledStickers(req: Request, res: Response) {
     }
 }
 
-export async function getMissingStickers(req: Request, res: Response) {
-    const userId = 5;
+export async function getMissingStickers(req: AuthenticatedRequest, res: Response) {
+    const { userId } = req;
 
     try {
-        const missingStickers = await findMissingStickers(userId);
-        if (!missingStickers) {
-            return res.sendStatus(400);
+        const allStickers = await findStickers();
+        const ownedStickers = await findAllUserStickers(userId);
+
+        const missingStickers = [];
+        const hashTable = {};
+
+        for (let i = 0; i < ownedStickers.length; i++) {
+            if (!hashTable[ownedStickers[i].stickerId]) {
+                hashTable[ownedStickers[i].stickerId] = true;
+            }
         }
-        
+
+        for (let i = 0; i < allStickers.length; i++) {
+            if (!hashTable[allStickers[i].id]) {
+                missingStickers.push(allStickers[i]);
+            }
+        }
+
         res.status(200).send(missingStickers);
         return;
     } catch (error) {
@@ -53,18 +68,22 @@ export async function getMissingStickers(req: Request, res: Response) {
     }
 }
 
-export async function createSpecialSticker(req: Request, res: Response) {
+export async function createSpecialSticker(req: AuthenticatedRequest, res: Response) {
 
 }
 
-export async function decreaseStickerCount(req: Request, res: Response) {
-    const userStickerId = Number(req.params.userStickerId);
-    const userId = 5; //garantir se é o dono deletando
+export async function decreaseStickerCount(req: AuthenticatedRequest, res: Response) {
+    const stickerId = Number(req.params.stickerId);
+    const { userId } = req;
 
     try {
-        await updateDoubledSticker(userStickerId);
-        
-        res.status(204);
+        const userOwnsSticker = await findSingleUserSticker(userId, stickerId);
+
+        if (userOwnsSticker !== null && userOwnsSticker.amount > 0) {
+            await updateDoubledSticker(userOwnsSticker.id);
+        }
+
+        res.sendStatus(204);
         return;
     } catch (error) {
         console.error(error);
@@ -72,14 +91,20 @@ export async function decreaseStickerCount(req: Request, res: Response) {
     }
 }
 
-export async function increaseStickerCount(req: Request, res: Response) {
-    const userStickerId = Number(req.params.userStickerId);
-    const userId = 5; //garantir se é o dono deletando
+export async function increaseStickerCount(req: AuthenticatedRequest, res: Response) {
+    const stickerId = Number(req.params.stickerId);
+    const { userId } = req;
 
     try {
-        await updateDoubledSticker(userStickerId);
-        
-        res.status(204);
+        const userOwnsSticker = await findSingleUserSticker(userId, stickerId);
+
+        if (userOwnsSticker === null) {
+            await createUserSticker(userId, stickerId);
+        } else {
+            await updateMissingSticker(userOwnsSticker.id);
+        }
+
+        res.sendStatus(204);
         return;
     } catch (error) {
         console.error(error);
@@ -87,14 +112,14 @@ export async function increaseStickerCount(req: Request, res: Response) {
     }
 }
 
-export async function removeSticker(req: Request, res: Response) {
-    const userStickerId = Number(req.params.userStickerId);
-    const userId = 5; //garantir se é o dono deletando
+export async function removeSticker(req: AuthenticatedRequest, res: Response) {
+    const stickerId = Number(req.params.stickerId);
+    const { userId } = req;
 
     try {
-        await resetUserSticker(userStickerId);
-        
-        res.status(204);
+        await resetUserSticker(userId, stickerId);
+
+        res.sendStatus(204);
         return;
 
     } catch (error) {

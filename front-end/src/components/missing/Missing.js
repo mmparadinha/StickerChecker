@@ -29,7 +29,7 @@ export default function Missing() {
             <Main>
                 <h1>Faltantes</h1>
                 <Container>
-                    {stickers.map(data => <Sticker key={data.id} userStickerId={data.id} data={data.stickers}/>)}
+                    {stickers.map(data => <Sticker key={data.id} data={data}/>)}
                 </Container>
             </Main>
             <Footer params={activeFooter}/>
