@@ -11,15 +11,13 @@ export async function searchUser(email: string): Promise<UserEntity> {
 }
 
 //conferir o retorno de cada modificação via prisma para tipar pelo TS
-//bug fix: findMany retorna todos, findFirst retorna sem conferir o token
 export async function searchUserBySession(token: string) {
-    return prisma.users.findFirst({
+    return prisma.sessions.findFirst({
+        where: {
+            token
+        },
         include: {
-            sessions: {
-                where: {
-                    token
-                }
-            }
+            users: true
         }
     });
 }
@@ -34,7 +32,7 @@ export async function insertNewUser(newUser: User): Promise<UserEntity> {
     });
 }
 
-export async function checkSession(userId: number): Promise<SessionEntity>{
+export async function checkSession(userId: number): Promise<SessionEntity> {
     return prisma.sessions.findFirst({
         where: {
             userId

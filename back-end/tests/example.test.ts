@@ -56,7 +56,6 @@ describe('Testing API', () => {
         })
 
         const result = await api.get("/user");
-        console.log(result.body)
         expect(result.body).toHaveLength(1);
     })
 })

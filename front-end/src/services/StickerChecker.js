@@ -1,6 +1,4 @@
 import axios from 'axios';
-import { useContext } from 'react';
-import UserContext from '../context/UserContext';
 
 const URL_BASE = process.env.REACT_APP_API_BASE_URL;
 
@@ -15,26 +13,25 @@ function postLogin(login) {
 };
 
 function Header() {
-  const { userInfo } = useContext(UserContext);
-  const token = userInfo?.token;
+  const authorization = JSON.parse(localStorage.getItem('sticker-checker'));
   const config = {
     headers: {
-      authorization: `Bearer ${token}`,
+      authorization: `Bearer ${authorization.token}`,
     }
   };
   return config;
 };
 
 function removeSticker(userStickerId) {
-    const config = Header();
-    const promise = axios.delete(`${URL_BASE}/${userStickerId}`, config);
-    return promise;
+  const config = Header();
+  const promise = axios.delete(`${URL_BASE}/${userStickerId}`, config);
+  return promise;
 }
 
 function removeDoubled(userStickerId) {
-    const config = Header();
-    const promise = axios.update(`${URL_BASE}/decrease/${userStickerId}`, config);
-    return promise;
+  const config = Header();
+  const promise = axios.update(`${URL_BASE}/decrease/${userStickerId}`, config);
+  return promise;
 }
 
 function addNewSticker(userStickerId) {
@@ -57,7 +54,6 @@ function getDoubledStickers() {
 
 function getMissingStickers() {
   const config = Header();
-  console.log(config)
   const promise = axios.get(`${URL_BASE}/missing`, config);
   return promise;
 }

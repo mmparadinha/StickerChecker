@@ -21,7 +21,7 @@ export default function SignIn() {
     if (userInfo?.token !== undefined) {
       navigate("/owned");
     }
-  }, [navigate]);
+  }, [navigate, userInfo]);
 
   function updateInput(e) {
     setLogin({ ...login, [e.target.name]: e.target.value });

@@ -23,7 +23,7 @@ export default function SignUp() {
     if (userInfo?.token !== undefined) {
       navigate("/owned");
     }
-  }, [navigate]);
+  }, [navigate, userInfo]);
 
   function updateInput(e) {
     setRegistration({ ...registration, [e.target.name]: e.target.value });

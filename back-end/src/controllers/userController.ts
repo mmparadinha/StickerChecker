@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { AuthenticatedRequest } from "../middlewares/authenticationMiddleware";
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from "uuid";
 import { searchUser, insertNewUser, checkSession, insertNewSession, removeUser, searchUserBySession, changeUsername, getUserOwnedStatus } from "../repositories/userRepository";
@@ -87,8 +88,7 @@ export async function signInUser(req: Request, res: Response) {
     }
 }
 
-//função fechada para manutenção rsrs - erro no método de busca do prisma via session
-export async function updateUsername(req: Request, res: Response) {
+export async function updateUsername(req: AuthenticatedRequest, res: Response) {
     const password: string = req.body.password.trim();
     const username: string = req.body.username.trim();
     const { authorization } = req.headers;
@@ -100,24 +100,22 @@ export async function updateUsername(req: Request, res: Response) {
     const token: string = authorization.replace('Bearer ', '');
 
     try {
-        const user = await searchUserBySession(token);
-        console.log(user)
-        // if (!user) {
-        //     res.sendStatus(404);
-        //     return;
-        // }
+        const session = await searchUserBySession(token);
+        if (!session) {
+            res.sendStatus(404);
+            return;
+        }
 
-        // const passwordCheck: boolean = bcrypt.compareSync(password, user.password);
+        const passwordCheck: boolean = bcrypt.compareSync(password, session.users.password);
 
-        // if (user && passwordCheck) {
-        //     await changeUsername(username, user.email);
-        //     res.sendStatus(200);
-        //     return;
-        // } else {
-        //     res.sendStatus(401);
-        //     return;
-        // }
-res.sendStatus(303)
+        if (session && passwordCheck) {
+            await changeUsername(username, session.users.email);
+            res.sendStatus(200);
+            return;
+        } else {
+            res.sendStatus(401);
+            return;
+        }
     } catch (err: unknown) {
         console.error(err);
         res.sendStatus(500);
@@ -125,8 +123,7 @@ res.sendStatus(303)
     }
 }
 
-//função fechada para manutenção rsrs - erro no método de busca do prisma via session
-export async function deleteUser(req: Request, res: Response) {
+export async function deleteUser(req: AuthenticatedRequest, res: Response) {
     const password: string = req.body.password.trim();
     const { authorization } = req.headers;
     if (!authorization) {
@@ -137,24 +134,22 @@ export async function deleteUser(req: Request, res: Response) {
     const token: string = authorization.replace('Bearer ', '');
 
     try {
-        const user = await searchUserBySession(token);
-    console.log(user)
-    //     if (!user.rows[0]) {
-    //         res.sendStatus(404);
-    //         return;
-    //     }
+        const session = await searchUserBySession(token);
+        if (!session) {
+            res.sendStatus(404);
+            return;
+        }
 
-    //     const passwordCheck: boolean = bcrypt.compareSync(password, user.rows[0].password);
+        const passwordCheck: boolean = bcrypt.compareSync(password, session.users.password);
 
-    //     if (user && passwordCheck) {
-    //         await removeUser(user.rows[0].email);
-    //         res.sendStatus(204);
-    //         return;
-    //     } else {
-    //         res.sendStatus(401);
-    //         return;
-    //     }
-res.sendStatus(303)
+        if (session && passwordCheck) {
+            await removeUser(session.users.email);
+            res.sendStatus(204);
+            return;
+        } else {
+            res.sendStatus(401);
+            return;
+        }
     } catch (err: unknown) {
         console.error(err);
         res.sendStatus(500);
@@ -162,8 +157,8 @@ res.sendStatus(303)
     }
 }
 
-//função fechada para manutenção rsrs - erro no método de busca do prisma via session
-export async function userStatus(req: Request, res: Response) {
+export async function userStatus(req: AuthenticatedRequest, res: Response) {
+    const { userId } = req;
     const { authorization } = req.headers;
     if (!authorization) {
         res.sendStatus(401);
@@ -173,14 +168,13 @@ export async function userStatus(req: Request, res: Response) {
     const token: string = authorization.replace('Bearer ', '');
 
     try {
-        const user = await searchUserBySession(token);
-        console.log(user)
-        // if (!user.rows[0]) {
-        //     res.sendStatus(404);
-        //     return;
-        // }
+        const session = await searchUserBySession(token);
+        if (!session) {
+            res.sendStatus(404);
+            return;
+        }
 
-        const ownedAmount = await getUserOwnedStatus(5); //TODO - pegar o id pela sessão do acesso
+        const ownedAmount = await getUserOwnedStatus(userId);
         res.status(200).send({
             ownedAmount
         });
