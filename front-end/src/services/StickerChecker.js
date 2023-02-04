@@ -16,27 +16,42 @@ function Header() {
   const authorization = JSON.parse(localStorage.getItem('sticker-checker'));
   const config = {
     headers: {
-      authorization: `Bearer ${authorization.token}`,
+      Authorization: `Bearer ${authorization.token}`,
     }
   };
   return config;
 };
 
-function removeSticker(userStickerId) {
+function removeSticker(stickerId) {
   const config = Header();
-  const promise = axios.delete(`${URL_BASE}/${userStickerId}`, config);
+  const promise = axios.delete(`${URL_BASE}/${stickerId}`, config);
   return promise;
 }
 
-function removeDoubled(userStickerId) {
-  const config = Header();
-  const promise = axios.update(`${URL_BASE}/decrease/${userStickerId}`, config);
+//axios.put() com problema, falha em definir o headers enquanto o restante funciona OK
+function removeDoubled(stickerId) {
+  const authorization = JSON.parse(localStorage.getItem('sticker-checker'));
+  const promise = axios({
+    method: "put",
+    url: `${URL_BASE}/decrease/${stickerId}`,
+    headers: {
+      Authorization: `Bearer ${authorization.token}`
+    },
+    data: {},
+  });
   return promise;
 }
 
-function addNewSticker(userStickerId) {
-  const config = Header();
-  const promise = axios.update(`${URL_BASE}/increase/${userStickerId}`, config);
+function addNewSticker(stickerId) {
+  const authorization = JSON.parse(localStorage.getItem('sticker-checker'));
+  const promise = axios({
+    method: "put",
+    url: `${URL_BASE}/increase/${stickerId}`,
+    headers: {
+      Authorization: `Bearer ${authorization.token}`
+    },
+    data: {},
+  });
   return promise;
 }
 

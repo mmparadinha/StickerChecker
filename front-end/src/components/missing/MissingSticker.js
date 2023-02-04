@@ -1,17 +1,17 @@
-import { useContext } from "react";
 import styled from "styled-components";
-import UserContext from "../../context/UserContext";
+import { useState } from "react";
 import { addNewSticker } from "../../services/StickerChecker";
 
-//avaliar se vai ser necessário desabilitar a figurinha, por não atualizar a pagina sempre
-
 export default function Sticker({ data }) {
-    const { userInfo } = useContext(UserContext);
     const stickerName = data.countries.name + ' ' + data.stickerNumber;
+    const [ disabled, setDisabled ] = useState(false);
 
-    async function markSticker() { 
+    async function markSticker() {
+        if (disabled) { return; }
+        
         try {
-            await addNewSticker(userInfo.id);
+            await addNewSticker(data.id);
+            setDisabled(true);
         } catch (error) {
             console.error(error);
             alert('Não foi possível, tente novamente!');
@@ -19,14 +19,14 @@ export default function Sticker({ data }) {
     }
     
     return (
-        <Main onClick={markSticker}>
+        <Main onClick={markSticker} disabled={disabled}>
             <p>{stickerName}</p>
         </Main>
     );
 }
 
 const Main = styled.button`
-    background-color: lightgray;
+    background-color: lightblue;
     height: 100px;
     width: 80px;
     border-radius: 10px;
@@ -41,5 +41,7 @@ const Main = styled.button`
 
     &:disabled {
         cursor: not-allowed;
+        background-color: darkgray;
+        color: #FFFFFF;
     }
 `;

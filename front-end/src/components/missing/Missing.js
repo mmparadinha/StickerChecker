@@ -7,7 +7,7 @@ import Sticker from "./MissingSticker.js";
 
 export default function Missing() {
     const [stickers, setStickers] = useState([]);
-    const activeFooter = { missing: true};
+    const activeFooter = { missing: true };
 
     async function listMissingStickers() {
         try {

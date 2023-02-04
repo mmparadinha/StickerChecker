@@ -7,7 +7,7 @@ import Sticker from "./DoubledSticker.js";
 
 export default function Doubled() {
     const [stickers, setStickers] = useState([]);
-    const activeFooter = { doubled: true};
+    const activeFooter = { doubled: true };
 
     async function listDoubledStickers() {
         try {
