@@ -4,7 +4,7 @@ export function Description() {
   return (
     <DescriptionContainer>
       <h1>Sticker Checker</h1>
-      <p>acompanhe o progresso do seu álbum da forma mais prática possível</p>
+      <p>acompanhe o progresso do seu álbum de forma prática</p>
     </DescriptionContainer>
   );
 }
@@ -13,8 +13,8 @@ const DescriptionContainer = styled.div`
 width: 60vw;
 height: 100vh;
 
-background-color: yellow;
-color: #000080;
+background-color: #000080;
+color: yellow;
 padding: 15px;
 gap: 20px;
 

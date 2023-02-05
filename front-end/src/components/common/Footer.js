@@ -18,12 +18,12 @@ export default function Footer({ params }) {
 }
 
 const Main = styled.div`
-    background-color: purple;
+    background-color: #858585;
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100vw;
-    height: 50px;
+    height: 60px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -36,8 +36,9 @@ const Menu = styled(Link)`
     padding: 10px;
     border-radius: 20px;
     text-align: center;
+    font-weight: 700;
 
-    color: ${props => props.selected ? '#FFFFFF' : '#000000'};
+    color: ${props => props.selected ? '#FFFFFF' : '#000080'};
     background-color: ${props => props.selected ? '#000080' : '#FFFFFF'};
     border: 2px solid ${props => props.selected ? '#FFFFFF' : '#000080'};
 `;

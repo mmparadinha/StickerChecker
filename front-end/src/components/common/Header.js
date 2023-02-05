@@ -7,20 +7,22 @@ export default function Header() {
 
   return (
     <Main>
-      <h2>Função de troca</h2>
-      <h2>Nome do álbum - Status do álbum</h2>
+      <h2>Função de troca<br/>(em breve)</h2>
+      <h2>Copa do Mundo Qatar 2022 - Status do álbum</h2>
       <h2>{userInfo?.username}</h2>
     </Main>
   );
 }
 
 const Main = styled.div`
-  background-color: cyan;
+  background-color: #858585;
+  color: #FFFFFF;
+  font-weight: 700;
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
-  height: 50px;
+  height: 60px;
   display: flex;
   justify-content: space-around;
   align-items: center;
