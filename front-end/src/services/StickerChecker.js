@@ -5,12 +5,12 @@ const URL_BASE = process.env.REACT_APP_API_BASE_URL;
 function postSignUp(registration) {
   const promise = axios.post(`${URL_BASE}/signup`, registration);
   return promise;
-};
+}
 
 function postLogin(login) {
   const promise = axios.post(`${URL_BASE}/signin`, login);
   return promise;
-};
+}
 
 function Header() {
   const authorization = JSON.parse(localStorage.getItem('sticker-checker'));
@@ -20,7 +20,7 @@ function Header() {
     }
   };
   return config;
-};
+}
 
 function removeSticker(stickerId) {
   const config = Header();
@@ -32,7 +32,7 @@ function removeSticker(stickerId) {
 function removeDoubled(stickerId) {
   const authorization = JSON.parse(localStorage.getItem('sticker-checker'));
   const promise = axios({
-    method: "put",
+    method: 'put',
     url: `${URL_BASE}/decrease/${stickerId}`,
     headers: {
       Authorization: `Bearer ${authorization.token}`
@@ -45,7 +45,7 @@ function removeDoubled(stickerId) {
 function addNewSticker(stickerId) {
   const authorization = JSON.parse(localStorage.getItem('sticker-checker'));
   const promise = axios({
-    method: "put",
+    method: 'put',
     url: `${URL_BASE}/increase/${stickerId}`,
     headers: {
       Authorization: `Bearer ${authorization.token}`

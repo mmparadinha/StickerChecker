@@ -1,20 +1,20 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export default function Footer({ params }) {
-    return (
-        <Main>
-            <Menu to="/missing" selected={params.missing}>
-                <h2>Faltantes</h2>
-            </Menu>
-            <Menu to="/" selected={params.owned}>
-                <h2>Obtidas</h2>
-            </Menu>
-            <Menu to="/doubled" selected={params.doubled}>
-                <h2>Repetidas</h2>
-            </Menu>
-        </Main>
-    );
+  return (
+    <Main>
+      <Menu to='/missing' selected={params.missing}>
+        <h2>Faltantes</h2>
+      </Menu>
+      <Menu to='/' selected={params.owned}>
+        <h2>Obtidas</h2>
+      </Menu>
+      <Menu to='/doubled' selected={params.doubled}>
+        <h2>Repetidas</h2>
+      </Menu>
+    </Main>
+  );
 }
 
 const Main = styled.div`

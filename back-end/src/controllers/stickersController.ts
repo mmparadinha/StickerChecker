@@ -93,7 +93,6 @@ export async function decreaseStickerCount(req: AuthenticatedRequest, res: Respo
 
 export async function increaseStickerCount(req: AuthenticatedRequest, res: Response) {
     const stickerId = Number(req.params.stickerId);
-    console.log(stickerId);
     const { userId } = req;
 
     try {

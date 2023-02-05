@@ -1,12 +1,12 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export function Description() {
-    return (
+  return (
     <DescriptionContainer>
-        <h1>Sticker Checker</h1>
-        <p>acompanhe o progresso do seu álbum da forma mais prática possível</p>
+      <h1>Sticker Checker</h1>
+      <p>acompanhe o progresso do seu álbum da forma mais prática possível</p>
     </DescriptionContainer>
-    );
+  );
 }
 
 const DescriptionContainer = styled.div`

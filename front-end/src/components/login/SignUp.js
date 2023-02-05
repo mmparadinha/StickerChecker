@@ -1,40 +1,40 @@
-import { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { postSignUp } from "../../services/StickerChecker";
-import UserContext from "../../context/UserContext";
-import { Input } from "./Input";
-import { Button } from "./Button";
-import { FormContainer } from "./Form";
-import { Description } from "./Description";
+import { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { postSignUp } from '../../services/StickerChecker';
+import UserContext from '../../context/UserContext';
+import { Input } from './Input';
+import { Button } from './Button';
+import { FormContainer } from './Form';
+import { Description } from './Description';
 
 export default function SignUp() {
   const navigate = useNavigate();
   const { userInfo } = useContext(UserContext);
   const [sending, setSending] = useState(false);
   const [registration, setRegistration] = useState({
-    email: "",
-    username: "",
-    password: "",
-    passwordConfirmation: ""
+    email: '',
+    username: '',
+    password: '',
+    passwordConfirmation: ''
   });
 
   useEffect(() => {
     if (userInfo?.token !== undefined) {
-      navigate("/owned");
+      navigate('/owned');
     }
   }, [navigate, userInfo]);
 
   function updateInput(e) {
     setRegistration({ ...registration, [e.target.name]: e.target.value });
-  };
+  }
 
   function resetForm() {
     setRegistration({
-      username: "",
-      email: "",
-      password: "",
-      passwordConfirmation: ""
+      username: '',
+      email: '',
+      password: '',
+      passwordConfirmation: ''
     });
     setSending(false);
   }
@@ -51,11 +51,11 @@ export default function SignUp() {
       console.error(error);
       resetForm();
     }
-  };
+  }
 
   return (
     <Main>
-      <Description/>
+      <Description />
 
       <FormContainer onSubmit={signUp}>
         <Input
@@ -95,11 +95,10 @@ export default function SignUp() {
           placeholder='Confirmar senha'
         />
         <Button type='submit' disabled={sending}> {sending ? 'Carregando...' : 'Criar conta'} </Button>
-        <p onClick={() => navigate("/")}>
+        <p onClick={() => navigate('/')}>
           Já possui conta? Acesse!
         </p>
       </FormContainer>
-
 
     </Main>
   );
