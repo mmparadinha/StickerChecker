@@ -1,14 +1,14 @@
 import { removeDoubled } from '../../../services/StickerChecker.js';
 import { StickerAmountContainer } from '../StickerAmountContainer.js';
-import { StickerContainer } from '../StickerContainer.js';
+import { Sticker } from '../Sticker.js';
 
-export default function Sticker({ data }) {
-  const stickerName = data.stickers.countries.name + ' ' + data.stickers.stickerNumber;
+export default function DoubledSticker({ country, data }) {
+  const stickerName = country + ' ' + data.stickerNumber;
   const necessaryAmount = 1;
 
   async function decreaseDoubledSticker() {
     try {
-      await removeDoubled(data.stickers.id);
+      await removeDoubled(data.id);
     } catch (error) {
       console.error(error);
       alert('Não foi possível, tente novamente!');
@@ -16,9 +16,9 @@ export default function Sticker({ data }) {
   }
 
   return (
-    <StickerContainer onClick={decreaseDoubledSticker}>
+    <Sticker onClick={decreaseDoubledSticker}>
       <p>{stickerName}</p>
-      <StickerAmountContainer>{data.amount - necessaryAmount}</StickerAmountContainer>
-    </StickerContainer>
+      <StickerAmountContainer>{data.userStickers[0].amount - necessaryAmount}</StickerAmountContainer>
+    </Sticker>
   );
 }

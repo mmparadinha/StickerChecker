@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-export default function Footer({ params }) {
+export default function Footer({ props }) {
   return (
     <Main>
-      <Menu to='/missing' selected={params.missing}>
+      <Menu to='/missing' selected={props.missing}>
         <h2>Faltantes</h2>
       </Menu>
-      <Menu to='/' selected={params.owned}>
+      <Menu to='/' selected={props.owned}>
         <h2>Obtidas</h2>
       </Menu>
-      <Menu to='/doubled' selected={params.doubled}>
+      <Menu to='/doubled' selected={props.doubled}>
         <h2>Repetidas</h2>
       </Menu>
     </Main>
@@ -22,6 +22,7 @@ const Main = styled.div`
     position: fixed;
     bottom: 0;
     left: 0;
+    z-index: 1;
     width: 100vw;
     height: 60px;
     display: flex;

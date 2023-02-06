@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react';
 import { getOwnedStickers } from '../../../services/StickerChecker.js';
 import Header from '../../common/Header.js';
 import Footer from '../../common/Footer.js';
-import Sticker from './OwnedSticker.js';
 import { MainPage } from '../MainPage.js';
-import { StickersBox } from '../StickersBox.js';
+import StickersBox from '../StickersBox.js';
 
 export default function Owned() {
   const [stickers, setStickers] = useState([]);
-  const activeFooter = { owned: true };
+  const activePage = { owned: true };
 
   async function listOwnedStickers() {
     try {
@@ -22,18 +21,16 @@ export default function Owned() {
 
   useEffect(() => {
     listOwnedStickers();
-  }, [stickers]);
+  }, []); //TO DO - renderizando infinitamente se relacionar com stickers. Se não relacionar, não fica reativo
 
   return (
     <>
       <Header />
       <MainPage>
         <h1>Obtidas</h1>
-        <StickersBox>
-          {stickers.map(data => <Sticker key={data.id} data={data} />)}
-        </StickersBox>
+        {stickers.map(country => <StickersBox key={country.id} data={country} props={activePage}/>)}
       </MainPage>
-      <Footer params={activeFooter} />
+      <Footer props={activePage} />
     </>
   );
 }
