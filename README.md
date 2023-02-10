@@ -1,4 +1,4 @@
-<img src="./front-end/public/assets/logo.png" alt="project logo" align="right"/>
+<img src="./front-end/public/assets/logo.png" alt="project logo" align="right" height="150"/>
 
 # StickerChecker
 
