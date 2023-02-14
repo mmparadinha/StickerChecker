@@ -163,7 +163,7 @@ export async function userStatus(req: AuthenticatedRequest, res: Response) {
     if (!authorization) {
         res.sendStatus(401);
         return;
-    }
+    } 
 
     const token: string = authorization.replace('Bearer ', '');
 

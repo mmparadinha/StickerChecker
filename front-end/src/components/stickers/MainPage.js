@@ -4,7 +4,7 @@ export const MainPage = styled.div`
 background-color: #FFFFFF;
 min-width: 100vw;
 min-height: 100vh;
-margin-top: 70px;
+margin-top: 110px;
 padding: 20px;
 
 h1 {

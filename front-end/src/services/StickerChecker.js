@@ -73,4 +73,10 @@ function getMissingStickers() {
   return promise;
 }
 
-export { postSignUp, postLogin, removeSticker, removeDoubled, addNewSticker, getOwnedStickers, getDoubledStickers, getMissingStickers };
+function getAlbumProgress() {
+  const config = Header();
+  const promise = axios.get(`${URL_BASE}/status`, config);
+  return promise;
+}
+
+export { postSignUp, postLogin, removeSticker, removeDoubled, addNewSticker, getOwnedStickers, getDoubledStickers, getMissingStickers, getAlbumProgress };

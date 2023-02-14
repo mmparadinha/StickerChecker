@@ -28,7 +28,7 @@ export default function Owned() {
       <Header />
       <MainPage>
         <h1>Obtidas</h1>
-        {stickers.map(country => <StickersBox key={country.id} data={country} props={activePage}/>)}
+        {stickers.map(country => <StickersBox key={country.id} data={country} props={activePage} />)}
       </MainPage>
       <Footer props={activePage} />
     </>
